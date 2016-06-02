@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+#Mac files
+.DS_Store
+
+venv/
+*~
+
+# File Uploads / Static
+static/m
+
+# ini file
+env.sh
+
