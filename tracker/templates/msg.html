@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div class="alert alert-success">
+        <strong>Success!</strong> {{ message }}
+    </div>
+{% else %}
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{ message }}
+    </div>
+{% endif %}
+
+<button class="btn btn-default" onclick="javascript:history.back()">Go back</button>
+{% endblock %}

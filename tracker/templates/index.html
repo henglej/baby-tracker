@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+
+<h2> Welcome to Logbook System!</h2>
+
+<div class="col-sm-7">
+	<div class="alert alert-info">
+	  <p> Please choose a menu item from above.</p>
+	  <ul>
+      <li><strong>Log</strong>: Create new Work Orders and log Products</li>
+	    <li><strong>Work Orders</strong>: Find and edit existing Work Orders</li>
+	    <li><strong>Products</strong>: Find and update existing Products</li>
+	    <li><strong>Parts</strong>: Create new or find and update old Parts</li>
+	    <li><strong>Admin</strong>: View and edit users, Parts, Products, and Work Orders in database</li>
+	  </ul>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
+.hyper {
+  color: blue;
+  text-decoration: underline;
+}
+
+.hyper:hover {
+  color: yellow;
+  text-decoration: none;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
