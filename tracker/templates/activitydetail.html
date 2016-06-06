@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>Activity Detail</h4><br>
+
+<form class="form-horizontal" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="name">Name</label>
+    <div class="col-sm-6">          
+      <input type="text" class="form-control" id="name" name="name" value="{{activity.name}}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="description">Description</label>
+    <div class="col-sm-6">          
+      <textarea class="form-control" rows="4" id="description" name="description">{{activity.description}}</textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="point">Is Point</label>
+    <div class="col-sm-6">
+      <div class="checkbox">
+          {% if activity.is_point %}
+              <label><input type="checkbox" id="point" name="point" value="point" checked></label>
+          {% else %}
+              <label><input type="checkbox" id="point" name="point" value="point"></label>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="active">Is Active</label>
+    <div class="col-sm-6">
+      <div class="checkbox">
+          {% if activity.is_active %}
+              <label><input type="checkbox" id="active" name="active" value="active" checked></label>
+          {% else %}
+              <label><input type="checkbox" id="active" name="active" value="active"></label>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">        
+    <div class="col-sm-offset-2 col-sm-5">
+      <button type="submit" class="btn btn-default" formaction="{% url 'updateactivity' activity.id %}">Update</button>
+    </div>
+    <div class="col-sm-5">
+      <button type="submit" class="btn btn-default" formaction="{% url 'deleteactivity' activity.id %}" onclick="return confirm('Are you sure to delete all related records also?')">Delete</button>
+    </div>
+  </div>
+</form>
+
+
+{% endblock %}

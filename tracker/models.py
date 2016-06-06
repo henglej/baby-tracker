@@ -10,7 +10,7 @@ class Activity(models.Model):
     description = models.TextField(blank=True)
     is_point = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='activities')
 
     def __str__(self):
         return self.name

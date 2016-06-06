@@ -1,21 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% load staticfiles %}
+ 
+<h4> Activities  &nbsp; <a class="btn btn-primary" href="{% url 'add' %}">Add</a> </h4>
 
-<h2> Welcome to Logbook System!</h2>
-
-<div class="col-sm-7">
-	<div class="alert alert-info">
-	  <p> Please choose a menu item from above.</p>
-	  <ul>
-      <li><strong>Log</strong>: Create new Work Orders and log Products</li>
-	    <li><strong>Work Orders</strong>: Find and edit existing Work Orders</li>
-	    <li><strong>Products</strong>: Find and update existing Products</li>
-	    <li><strong>Parts</strong>: Create new or find and update old Parts</li>
-	    <li><strong>Admin</strong>: View and edit users, Parts, Products, and Work Orders in database</li>
-	  </ul>
-	</div>
-</div>
+{% if activities %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Records</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for activity in activities %}
+          <tr>
+            <td><a href="{% url 'showactivity' activity.0.id %}">{{activity.0.name}}</a></td>
+            <td><a href="{% url 'showevents' activity.0.id %}">{{activity.1}}</a></td>
+            <td>
+              {% if activity.0.is_point %}
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" formaction="{% url 'startactivity' activity.0.id %}">Record</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">More</a></li>
+                    </ul>
+                  </div>
+                </form>
+              {% else %}
+                {% if activity.2 %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <div class="btn-group">
+                      <button type="submit" class="btn btn-danger" formaction="{% url 'endactivity' activity.2.id %}">End</button>
+                      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">More</a></li>
+                      </ul>
+                    </div>
+                  </form>
+                {% else %}
+                  <form method="post">
+                    <div class="btn-group">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary" formaction="{% url 'startactivity' activity.0.id %}">Start</button>
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">More</a></li>
+                      </ul>
+                    </div>
+                  </form>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+    
+{% else %}
+    <em>There is no activity.</em>
+{% endif %}
 
 {% endblock %}
+

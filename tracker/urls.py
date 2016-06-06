@@ -22,4 +22,12 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.userlogin, name='login'),
     url(r'^logout/$', views.userlogout, name='logout'),
+    url(r'^archive/$', views.archive, name='archive'),
+    url(r'^add/$', views.add, name='add'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/$', views.showactivity, name='showactivity'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/update/$', views.updateactivity, name='updateactivity'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/delete/$', views.deleteactivity, name='deleteactivity'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/start/$', views.startactivity, name='startactivity'),
+    url(r'^event/(?P<event_id>[0-9]+)/end/$', views.endactivity, name='endactivity'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/showevents/$', views.showevents, name='showevents'),
 ]

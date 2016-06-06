@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+ 
+<h4> Archive </h4>
+
+{% if activities %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Records</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for activity in activities %}
+          <tr>
+            <td><a href="{% url 'showactivity' activity.0.id %}">{{activity.0.name}}</a></td>
+            <td><a href="{% url 'showevents' activity.0.id %}">{{activity.1}}</a></td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+    
+{% else %}
+    <em>There is no activity.</em>
+{% endif %}
+
+{% endblock %}
+

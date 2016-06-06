@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+ 
+<h4>{{activity.name}}</h4>
+
+{% if events %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Start At</th>
+        <th>End At</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{event.start_at}}</td>
+            <td>{{event.end_at}}</td>
+            <td>{{event.data}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+    
+{% else %}
+    <em>There is no event yet.</em>
+{% endif %}
+
+{% endblock %}
+
