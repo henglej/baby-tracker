@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from django.utils import timezone
 
 from .models import Activity, Event
 
@@ -112,7 +112,7 @@ def startactivity(request, activity_id):
         return render(request, 'msg.html', {'success': False, 'message': 'Cannot start the activity in archive'})
     event = Event()
     event.activity = activity
-    event.start_at = datetime.now()
+    event.start_at = timezone.now()
     event.save()
     return HttpResponseRedirect(reverse('index'))
 
@@ -124,7 +124,7 @@ def endactivity(request, event_id):
         return render(request, 'msg.html', {'success': False, 'message': 'Cannot end the activity'})
     if not event.activity.is_active:
         return render(request, 'msg.html', {'success': False, 'message': 'Cannot end the activity in archive'})
-    event.end_at = datetime.now()
+    event.end_at = timezone.now()
     event.save()
     return HttpResponseRedirect(reverse('index'))
 
