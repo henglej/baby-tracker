@@ -81,8 +81,8 @@ DATABASES = {
         'NAME': 'tracker',
         'USER': os.environ.get('DBUSER', ''),
         'PASSWORD': os.environ.get('DBPWD', ''),
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': os.environ.get('DBHOST', ''),
+        'PORT': os.environ.get('DBPORT', ''),
     }
 }
 
