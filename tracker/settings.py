@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'tracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tracker',
-        'USER': os.environ.get('DBUSER', ''),
-        'PASSWORD': os.environ.get('DBPWD', ''),
-        'HOST': os.environ.get('DBHOST', ''),
-        'PORT': os.environ.get('DBPORT', ''),
+        'NAME': os.environ.get('RDS_DB_NAME', ''),
+        'USER': os.environ.get('RDS_USERNAME', ''),
+        'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
+        'HOST': os.environ.get('RDS_HOSTNAME', ''),
+        'PORT': os.environ.get('RDS_PORT', ''),
     }
 }
 
