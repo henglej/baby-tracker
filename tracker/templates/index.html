@@ -28,7 +28,7 @@
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">More</a></li>
+                      <li><a href="{% url 'startactivityat' activity.0.id %}">Record more</a></li>
                     </ul>
                   </div>
                 </form>
@@ -42,7 +42,7 @@
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">More</a></li>
+                        <li><a href="{% url 'endactivityat' activity.2.id %}">End at</a></li>
                       </ul>
                     </div>
                   </form>
@@ -55,7 +55,7 @@
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">More</a></li>
+                        <li><a href="{% url 'startactivityat' activity.0.id %}">Start at</a></li>
                       </ul>
                     </div>
                   </form>

@@ -1,9 +1,12 @@
+from datetime import datetime
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.timezone import get_current_timezone
 
 from .models import Activity, Event
 
@@ -93,6 +96,8 @@ def updateactivity(request, activity_id):
 
 @login_required
 def deleteactivity(request, activity_id):
+    if request.method != 'POST':
+        return render(request, 'msg.html', {'success': False, 'message': 'Wrong method'})
     activity = get_object_or_404(Activity, pk=activity_id)
     if activity.owner != request.user:
         return render(request, 'msg.html', {'success': False, 'message': 'Cannot delete the activity'})
@@ -118,6 +123,35 @@ def startactivity(request, activity_id):
 
 
 @login_required
+def startactivityat(request, activity_id):
+    activity = get_object_or_404(Activity, pk=activity_id)
+    if activity.owner != request.user:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot start the activity'})
+    if not activity.is_active:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot start the activity in archive'})
+    if request.method == 'GET':
+        event = Event()
+        event.activity = activity
+        event.start_at = timezone.now()
+        return render(request, 'eventstart.html', {'event': event})
+    try:
+        event = Event()
+        event.activity = activity
+        start_at = request.POST['start'].replace('a.m.', 'AM').replace('p.m.', 'PM') + ' CST'
+        event.start_at = datetime.strptime(start_at, '%B %d, %Y, %I:%M %p %Z')
+        data = request.POST['data'].strip()
+        if data:
+            event.data = Decimal(data)
+        else:
+            event.data = None
+        event.save()
+        return HttpResponseRedirect(reverse('index'))
+    except Exception as ex:
+        context = {'success': False, 'message': str(ex)}
+        return render(request, 'msg.html', context)
+
+
+@login_required
 def endactivity(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if event.activity.owner != request.user:
@@ -130,12 +164,81 @@ def endactivity(request, event_id):
 
 
 @login_required
+def endactivityat(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if event.activity.owner != request.user:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot end the activity'})
+    if not event.activity.is_active:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot end the activity in archive'})
+    if request.method == 'GET':
+        event.end_at = timezone.now()
+        return render(request, 'eventend.html', {'event': event})
+    try:
+        start_at = request.POST['start'].replace('a.m.', 'AM').replace('p.m.', 'PM') + ' CST'
+        event.start_at = datetime.strptime(start_at, '%B %d, %Y, %I:%M %p %Z')
+        if not event.activity.is_point:
+            end_at = request.POST['end'].replace('a.m.', 'AM').replace('p.m.', 'PM') + ' CST'
+            event.end_at = datetime.strptime(end_at, '%B %d, %Y, %I:%M %p %Z')
+            if start_at > end_at:
+                raise Exception('Start time must be before end time')
+        data = request.POST['data'].strip()
+        if data:
+            event.data = Decimal(data)
+        else:
+            event.data = None
+        event.save()
+        return HttpResponseRedirect(reverse('index'))
+    except Exception as ex:
+        context = {'success': False, 'message': str(ex)}
+        return render(request, 'msg.html', context)
+
+
+@login_required
 def showevents(request, activity_id):
     activity = get_object_or_404(Activity, pk=activity_id)
     if activity.owner != request.user:
         return render(request, 'msg.html', {'success': False, 'message': 'Cannot show records in the activity'})
     events = list(activity.events.all().order_by('-start_at'))
     return render(request, 'events.html', {'activity': activity, 'events': events})
+
+
+@login_required
+def updateevent(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if event.activity.owner != request.user:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot edit the event'})
+    if not event.activity.is_active:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot update the archived activity'})
+    if request.method == 'GET':
+        return render(request, 'eventdetail.html', {'event': event})
+    try:
+        start_at = request.POST['start'].replace('a.m.', 'AM').replace('p.m.', 'PM') + ' CST'
+        event.start_at = datetime.strptime(start_at, '%B %d, %Y, %I:%M %p %Z')
+        if not event.activity.is_point:
+            end_at = request.POST['end'].replace('a.m.', 'AM').replace('p.m.', 'PM') + ' CST'
+            event.end_at = datetime.strptime(end_at, '%B %d, %Y, %I:%M %p %Z')
+            if start_at > end_at:
+                raise Exception('Start time must be before end time')
+        data = request.POST['data'].strip()
+        if data:
+            event.data = Decimal(data)
+        else:
+            event.data = None
+        event.save()
+        return HttpResponseRedirect(reverse('showevents', args=(event.activity.id,)))
+    except Exception as ex:
+        context = {'success': False, 'message': str(ex)}
+        return render(request, 'msg.html', context)
+
+
+@login_required
+def deleteevent(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if event.activity.owner != request.user:
+        return render(request, 'msg.html', {'success': False, 'message': 'Cannot edit the event'})
+    if request.method == 'GET':
+        return render(request, 'eventdetail.html', {'event': event})
+    return render(request, 'eventdetail.html', {'event': event})
 
 
 def userlogin(request):

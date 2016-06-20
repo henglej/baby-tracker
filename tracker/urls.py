@@ -27,7 +27,11 @@ urlpatterns = [
     url(r'^activity/(?P<activity_id>[0-9]+)/$', views.showactivity, name='showactivity'),
     url(r'^activity/(?P<activity_id>[0-9]+)/update/$', views.updateactivity, name='updateactivity'),
     url(r'^activity/(?P<activity_id>[0-9]+)/delete/$', views.deleteactivity, name='deleteactivity'),
+    url(r'^activity/(?P<activity_id>[0-9]+)/startat/$', views.startactivityat, name='startactivityat'),
     url(r'^activity/(?P<activity_id>[0-9]+)/start/$', views.startactivity, name='startactivity'),
+    url(r'^event/(?P<event_id>[0-9]+)/endat/$', views.endactivityat, name='endactivityat'),
     url(r'^event/(?P<event_id>[0-9]+)/end/$', views.endactivity, name='endactivity'),
+    url(r'^event/(?P<event_id>[0-9]+)/update/$', views.updateevent, name='updateevent'),
+    url(r'^event/(?P<event_id>[0-9]+)/delete/$', views.deleteevent, name='deleteevent'),
     url(r'^activity/(?P<activity_id>[0-9]+)/showevents/$', views.showevents, name='showevents'),
 ]

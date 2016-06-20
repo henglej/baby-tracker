@@ -9,9 +9,14 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Start At</th>
-        <th>End At</th>
+        {% if activity.is_point %}
+          <th>Time</th>
+        {% else %}
+          <th>Start at</th>
+          <th>End at</th>
+        {% endif %}
         <th>Data</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -19,8 +24,11 @@
           <tr>
             <td>{{forloop.counter}}</td>
             <td>{{event.start_at}}</td>
-            <td>{{event.end_at}}</td>
-            <td>{{event.data}}</td>
+            {% if not activity.is_point %}
+              <td>{{event.end_at | default_if_none:''}}</td>
+            {% endif %}
+            <td>{{event.data | default_if_none:'' | floatformat:-2}}</td>
+            <td><a href="{% url 'updateevent' event.id %}">Update</a></td>
           </tr>
         {% endfor %}
     </tbody>
